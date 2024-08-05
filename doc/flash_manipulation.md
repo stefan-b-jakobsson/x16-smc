@@ -1,5 +1,5 @@
 # SMC flash manipulation tools, v5
-Author: Eirik Stolpe
+Author: Eirik Stople
 
 These tools allows X16 to dump entire SMC flash, and manipulate bootloader.
 
@@ -8,44 +8,43 @@ These tools allows X16 to dump entire SMC flash, and manipulate bootloader.
 
 New I2C commands to SMC application, added in SMC version 47.2.0:
 
-Write $90 -> set page to read/write
-Read  $91 -> Read byte from flash and increment pointer
-Write $92 -> Write byte to flash buffer and increment pointer
-             -> Will write to flash once a full page (64 bytes) have been received
-             -> Will only manipulate flash in bootloader area (page 120-127)
-Read  $93 -> Check if flash manipulation is unlocked (0: locked, 1: unlocked, 255: old SMC version)
-Write $93 -> Request flash manipulation (1: flash manipulation unlock request, 0: flash manipulation lock)
+- Write $90 -> set page to read/write
+- Read  $91 -> Read byte from flash and increment pointer
+- Write $92 -> Write byte to flash buffer and increment pointer
+  - Will write to flash once a full page (64 bytes) have been received
+  - Will only manipulate flash in bootloader area (page 120-127)
+- Read  $93 -> Check if flash manipulation is unlocked
+  - (0: locked, 1: unlocked, 255: old SMC version)
+- Write $93 -> Request flash manipulation
+  - (1: flash manipulation unlock request, 0: flash manipulation lock)
 
 
 ## Usage
 
 1: Install SMC version 47.2.0 or later
--> Follow the guide "how to use the bad version of bootloader v2"
--> Optionally, use an ISP programmer/Arduino
-
-   Use the HELP command and verify that you have version 47.2.0 or later before you proceed.
+- Follow the guide "how to use the bad version of bootloader v2"
+- Optionally, use an ISP programmer/Arduino
+- Use the `HELP` command and verify that you have version 47.2.0 or later before you proceed.
 
 2: Copy BOOT2.BIN, SMCBLD2.PRG and SMCBLW16.PRG to the SD card
 
 3: (optional) If you want to dump the flash to screen/ram/SD card, you can copy extra/SMCDMP8.PRG to SD card and run it.
 
 4: Examine your current bootloader using SMCBLD2.PRG.
-   LOAD "SMCBLD2.PRG"
-   RUN
+- `LOAD "SMCBLD2.PRG"`
+- `RUN`
 
-   This will dump the bootloader section of flash ($1E00-$1FFF) to screen and to RAM ($7E00-$7FFF).
-   Then it will compute, print and compare the CRC-16 of bootloader area with known CRC-16 of existing bootloaders:
-   -$19B5 -> Bootloader v1
-   -$15C7 -> Bootloader v2
-   -$7594 -> Bootloader v2 (bad), this is the one shipped with lots of machines
-   -$6995 -> No bootloader installed (all FF), or SMC version is too old (v47 or older)
+This will dump the bootloader section of flash ($1E00-$1FFF) to screen and to RAM ($7E00-$7FFF). Then it will compute, print and compare the CRC-16 of bootloader area with known CRC-16 of existing bootloaders:
+- $19B5 -> Bootloader v1
+- $15C7 -> Bootloader v2
+- $7594 -> Bootloader v2 (bad), this is the one shipped with lots of machines
+- $6995 -> No bootloader installed (all FF), or SMC version is too old (v47 or older)
 
 5: Upgrade bootloader with SMCBLW16.PRG
+- `LOAD "SMCBLW16.PRG"`
+- `RUN`
 
-   LOAD "SMCBLW16.PRG"
-   RUN
-
-   The bootloader programming tool will load the new bootloader from file BOOT2.BIN (bootloader v2) into ram address $7C00-$7DFF.
+The bootloader programming tool will load the new bootloader from file BOOT2.BIN (bootloader v2) into ram address $7C00-$7DFF.
    (You can optionally choose a different file: BOOT1.BIN (boot v1) or BOOT2BAD.BIN (bad version of v2 bootloader)).
    The loaded bootloader will be printed to screen. CRC-16 is printed to screen, along with version info, if CRC-16 is recognized.
    Then it will unlock flash programming, which requires a button press (Power + Reset).
@@ -54,24 +53,24 @@ Write $93 -> Request flash manipulation (1: flash manipulation unlock request, 0
    If mismatch, user can try again. If OK, programming have succeeded.
 
 6: Examine your current bootloader, after programming, using SMCBLD2.PRG
-   LOAD "SMCBLD2.PRG"
-   RUN
-   
-   This performs an independent validation that you have installed the correct bootloader version 2.
+- `LOAD "SMCBLD2.PRG"`
+- `RUN`
+
+This performs an independent validation that you have installed the correct bootloader version 2.
 
 
 ## Tools (written in BASIC)
 
 SMCDMP8.PRG -> Dump entire flash
-This will dump the SMC flash to screen as a hex dump, and store it to RAM at address $6000-$7FFF.
-You can store this to SD card using BSAVE "DUMPSMC.BIN",8,1,$6000,$7FFF
+- This will dump the SMC flash to screen as a hex dump, and store it to RAM at address $6000-$7FFF.
+- You can store this to SD card using `BSAVE "DUMPSMC.BIN",8,1,$6000,$7FFF`
 
 SMCBLD2.PRG -> Bootloader dump
-This will dump only the bootloader section ($1E00-$1FFF) to screen and to RAM ($7E00-$7FFF).
+- This will dump only the bootloader section ($1E00-$1FFF) to screen and to RAM ($7E00-$7FFF).
 
 SMCBLW16.PRG -> Bootloader programming:
-This tool will overwrite the bootloader section of flash ($1E00-$1FFF) with the contents of the specified .BIN file.
-NB: After programming, please load SMCBLD2.PRG to independently validate bootloader version.
+- This tool will overwrite the bootloader section of flash ($1E00-$1FFF) with the contents of the specified .BIN file.
+- NB: After programming, please load SMCBLD2.PRG to independently validate bootloader version.
 
 Ordinary users are encouraged to install the correct v2 bootloader (BOOT2.BIN).
 Advanced users can experiment with bootloader v1 or the corrupt version of v2, included in the "extra" folder. Or install newer bootloaders.

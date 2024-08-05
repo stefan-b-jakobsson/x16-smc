@@ -1,5 +1,5 @@
 # SMC update with bad bootloader v2 (July 13th)
-Author: Eirik Stolpe
+Author: Eirik Stople
 
 NB: Please read and understand the guide before attempting to use it to recover the SMC.
 
@@ -21,9 +21,9 @@ If you follow this guide, you will most likely be able to update the SMC without
 
 WARNING: Although this guide explains how to perform this update, there is still a risk of something failing, causing a bricked SMC (requiring an external programmer) or even a shorted X16, in case wrong pins are connected. Proceed at your own risk.
 
-This procedure have only been tested with R47 ROM and VERA. Enter "HELP" and ensure that you have these versions:
-- COMMANDER X16 ROM RELEASE R47
-- VERA: V47.0.2
+This procedure have only been tested with R47 ROM and VERA. Enter `HELP` and ensure that you have these versions:
+- `COMMANDER X16 ROM RELEASE R47`
+- `VERA: V47.0.2`
 
 If you have an older version (e.g. R45), start upgrading to R47. See here for a guide: 
 - https://www.facebook.com/groups/CommanderX16/posts/1585423168875438/ or 
@@ -31,7 +31,7 @@ If you have an older version (e.g. R45), start upgrading to R47. See here for a 
 
 IMPORTANT: DO NOT DOWNLOAD AND UPDATE SMC FIRMWARE AT THIS STEP!
 
-Once VERA and ROM have been updated to R47, type "HELP" and note the SMC version. You can also poll the bootloader version using "PRINT I2CPEEK($42,$8E)". If it shows "2", you may either have the good or the bad v2 bootloader. You may want to take a picture of the versions you have before you proceed. The bad bootloader seem to at least be present in PR boards between PR00100 and PR00831, with SMC version 45.1.0. From around PR00900, X16s are delivered with 47.0.0, likely with a good bootloader.
+Once VERA and ROM have been updated to R47, type `HELP` and note the SMC version. You can also poll the bootloader version using `PRINT I2CPEEK($42,$8E)`. If it shows "2", you may either have the good or the bad v2 bootloader. You may want to take a picture of the versions you have before you proceed. The bad bootloader seem to at least be present in PR boards between PR00100 and PR00831, with SMC version 45.1.0. From around PR00900, X16s are delivered with 47.0.0, likely with a good bootloader.
 
 
 ### Update procedure
@@ -63,13 +63,13 @@ Copy "x16-smc.ino.hex" and "SMCUPDATE-2.0.PRG" to SD-card.
 
 On this page, you can see a video of what to expect on screen during the update: https://github.com/stefan-b-jakobsson/x16-smc-update
 
-Start your X16. Start the update program using the command
-- LOAD "SMCUPDATE-2.0.PRG"
-- RUN
+Start your X16. Start the update program using these commands:
+- `LOAD "SMCUPDATE-2.0.PRG"`
+- `RUN`
 
 Make note of reported bootloader version, it should be 1 or 2. Read the warning and press Y. Enter filename, "x16-smc.ino.hex", without quotes. Follow the on-screen instructions to start programming, using a button combination in the process. Once programming is done, you get a countdown before the X16 will "automatically power off". If the X16 automatically powers off, you have the good v2 bootloader already. If the machine does not power off, you either have bootloader 1, or a bad bootloader 2. If bootloader is version 2 and it does not power off, DO NOT disconnect power. Instead, you have to reset the SMC by connecting a wire from ground to the reset pin, as you have already practiced earlier. If, however, bootloader is reported to be version 1, you can power the machine off with either a wire, or by disconnecting its power.
 
-Push the power button to power on the SMC. Type "HELP" to check if you have updated to the newer version.
+Push the power button to power on the SMC. Type `HELP` to check if you have updated to the newer version.
 
 If this worked, you now have a method of updating your SMC without needing an external programmer. However, you may want to repair the bootloader, so that you do not have to use a wire every time there is an update. The new SMC version contains an interface which can be used to repair the bootloader. See the attached folder "smc-flash-manipulation-5" for details.
 
