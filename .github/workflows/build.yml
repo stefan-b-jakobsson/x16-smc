@@ -69,6 +69,4 @@ jobs:
             build/x16-smc.ino.elf
             build/x16-smc.ino.hex
             build/SMC*.BIN
-            build/bootloader.hex
-            build/bootloader.bin
             build/README
