@@ -51,12 +51,6 @@ ih = IntelHex()
 ih.loadfile(firmware_hex, format="hex")
 firmware = ih.tobinarray()
 
-# Create output folder, if not exist
-try:
-    os.mkdir(".build")
-except:
-    pass
-
 # Create SMC.BIN file
 smc = open(target_folder + "/SMC-" + str(version_major) + "." + str(version_minor) + "." + str(version_patch) + ".BIN", "wb")
 i = 0
