@@ -50,6 +50,7 @@ jobs:
       - name: Fetch bootloader
         run: |
           wget -O build/bootloader.hex https://github.com/X16Community/x16-smc-bootloader/releases/download/v2/bootloader.hex  
+          python scripts/merge_firmware_and_bootloader.py
       
       - name: Compile SMCUPDATE program
         run: |
